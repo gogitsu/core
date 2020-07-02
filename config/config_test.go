@@ -6,7 +6,10 @@ import (
 )
 
 type TestConfiguration struct {
-	Service Service
+	Service struct {
+		Group string
+		Name  string
+	}
 }
 
 func init() {

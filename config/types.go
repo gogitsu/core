@@ -73,8 +73,3 @@ type (
 		Log     Log
 	}
 )
-
-// Get .
-func (c Configuration) Get() {
-	// do nothing
-}

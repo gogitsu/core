@@ -26,8 +26,6 @@ func TestConfig(t *testing.T) {
 	if c == nil {
 		t.Error("c is nil")
 	}
-
-	t.Logf("configuration: %+v\n", c)
 }
 
 func TestTestConfiguration(t *testing.T) {
@@ -44,7 +42,4 @@ func TestTestConfiguration(t *testing.T) {
 	} else if tc.Service.Group != "test-group" {
 		t.Errorf("tc.Service.Group != 'test-group'... is: %s\n", tc.Service.Group)
 	}
-
-	t.Logf("configuration: %+v\n", tc)
-
 }

@@ -1,23 +1,50 @@
 package config
 
 import (
-	"log"
+	"os"
 	"testing"
 )
 
-func TestServiceStruct(t *testing.T) {
-	log.Println("testing config.Service struct")
-	s := Service{
-		Group:   "test-group",
-		Name:    "test-name",
-		Version: "0.0.1",
+type TestConfiguration struct {
+	Service Service
+}
+
+func init() {
+	os.Setenv("ENV", "test")
+}
+
+func TestConfig(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			t.Errorf("PANIC: %+v\n", r)
+		}
+	}()
+
+	var c *Configuration
+
+	Config(&c)
+	if c == nil {
+		t.Error("c is nil")
 	}
 
-	if s.Group != "test-group" {
-		t.Error("s.Group != 'test-group'")
-	} else if s.Name != "test-name" {
-		t.Error("s.Name != 'test-name'")
-	} else if s.Version != "0.0.1" {
-		t.Error("s.Version != '0.0.1'")
+	t.Logf("configuration: %+v\n", c)
+}
+
+func TestTestConfiguration(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			t.Errorf("PANIC: %+v\n", r)
+		}
+	}()
+
+	var tc *TestConfiguration
+	ReConfig(&tc)
+	if tc == nil {
+		t.Error("tc is nil")
+	} else if tc.Service.Group != "test-group" {
+		t.Errorf("tc.Service.Group != 'test-group'... is: %s\n", tc.Service.Group)
 	}
+
+	t.Logf("configuration: %+v\n", tc)
+
 }

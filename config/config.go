@@ -26,6 +26,8 @@ func Config(cfg interface{}) {
 }
 
 // ReConfig loads configuration from file each time is called.
+// To be used in reload configuration case.
+// Please, try and use only Config().
 func ReConfig(cfg interface{}) {
 	env = os.Getenv("ENV")
 	if env == "" {
@@ -35,19 +37,10 @@ func ReConfig(cfg interface{}) {
 	instance = cfg
 }
 
+//
+// TODO: remove the panic() call and return an error... to be able to use default configurations.
+//
 func loadConfig(cfg interface{}) {
-	// viper.AddConfigPath(".")
-	// viper.AddConfigPath("./config")
-	// viper.SetConfigName("config-" + env)
-	// viper.SetConfigType("yml")
-	// viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
-	// viper.AutomaticEnv()
-	// viper.BindEnv("SERVICE_GROUP")
-
-	// if err := viper.ReadInConfig(); err != nil {
-	// 	panic(fmt.Errorf("fatal error config file: %s", err))
-	// }
-
 	ReadConfig()
 
 	if err := viper.Unmarshal(&cfg); err != nil {
@@ -56,6 +49,8 @@ func loadConfig(cfg interface{}) {
 }
 
 // ReadConfig read configuration from config file.
+// Used by ReConfig() but it is also public in the case we want
+// only load configuration into Viper and use Getxxxx() methods.
 func ReadConfig() {
 	onceRead.Do(func() {
 		ReReadConfig()
@@ -85,4 +80,12 @@ func Get(key string) interface{} {
 // GetString returns a string by key.
 func GetString(key string) string {
 	return viper.GetString(key)
+}
+
+// GetStruct get configuration by key and decode it into the passed struct.
+func GetStruct(cstruct interface{}) error {
+	if err := viper.Unmarshal(&cstruct); err != nil {
+		return err
+	}
+	return nil
 }

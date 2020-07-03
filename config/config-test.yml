@@ -42,3 +42,21 @@ db:
     enabled: true
     drop: true
     singularTableNames: true
+
+bkpDb:
+  type: mysql
+  host: localhost
+  port: 3306
+  user: xxxxxx
+  password: yyyyyy
+  database: zzzzzz
+  log: false
+  migrations:
+    enabled: true
+    drop: true
+    singularTableNames: true
+
+component:
+  name: cmp1
+
+version: v1

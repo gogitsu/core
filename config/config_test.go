@@ -59,3 +59,32 @@ func TestGet(t *testing.T) {
 		t.Error("client.timeout is nil")
 	}
 }
+
+func TestGetStruct(t *testing.T) {
+	type cfg struct {
+		Component struct {
+			Name string
+		}
+		Version string
+	}
+	var sconf *cfg
+	if err := GetStruct(&sconf); err != nil {
+		t.Error("unable to unmarshal configuration struct")
+	} else if sconf.Component.Name != "cmp1" {
+		t.Error("Component.Name is not 'cmp1'")
+	}
+}
+
+func TestGetBkpDb(t *testing.T) {
+	type cfg struct {
+		BkpDB DB `yaml:"bkp-db"`
+	}
+	var sconf *cfg
+	if err := GetStruct(&sconf); err != nil {
+		t.Error("unable to unmarshal configuration struct")
+	} else if sconf.BkpDB.Host != "localhost" {
+		t.Logf("sconf: %+v\n", sconf)
+		t.Logf("sconf.BkpDB.Host: %s\n", sconf.BkpDB.Host)
+		t.Error("BkpDB.Host is not 'localhost'")
+	}
+}

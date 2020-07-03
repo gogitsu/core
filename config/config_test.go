@@ -46,3 +46,16 @@ func TestTestConfiguration(t *testing.T) {
 		t.Errorf("tc.Service.Group != 'test-group'... is: %s\n", tc.Service.Group)
 	}
 }
+
+func TestGetString(t *testing.T) {
+	ReadConfig()
+	if val := GetString("client.balancing.strategy"); val == "" {
+		t.Error("client.balancing.strategy is not valued")
+	}
+}
+
+func TestGet(t *testing.T) {
+	if val := Get("client.timeout"); val == nil {
+		t.Error("client.timeout is nil")
+	}
+}

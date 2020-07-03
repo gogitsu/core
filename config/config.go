@@ -11,6 +11,7 @@ import (
 
 var env string
 var onceConfig sync.Once
+var onceRead sync.Once
 var instance interface{}
 
 // Config loads the configuration structure singleton instance.
@@ -30,11 +31,39 @@ func ReConfig(cfg interface{}) {
 	if env == "" {
 		env = "dev"
 	}
-	loadConfiguration(&cfg)
+	loadConfig(&cfg)
 	instance = cfg
 }
 
-func loadConfiguration(cfg interface{}) {
+func loadConfig(cfg interface{}) {
+	// viper.AddConfigPath(".")
+	// viper.AddConfigPath("./config")
+	// viper.SetConfigName("config-" + env)
+	// viper.SetConfigType("yml")
+	// viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	// viper.AutomaticEnv()
+	// viper.BindEnv("SERVICE_GROUP")
+
+	// if err := viper.ReadInConfig(); err != nil {
+	// 	panic(fmt.Errorf("fatal error config file: %s", err))
+	// }
+
+	ReadConfig()
+
+	if err := viper.Unmarshal(&cfg); err != nil {
+		panic(fmt.Errorf("fatal error decoding configuration into struct: %v", err))
+	}
+}
+
+// ReadConfig read configuration from config file.
+func ReadConfig() {
+	onceRead.Do(func() {
+		ReReadConfig()
+	})
+}
+
+// ReReadConfig reload configuration from file.
+func ReReadConfig() {
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("./config")
 	viper.SetConfigName("config-" + env)
@@ -46,8 +75,14 @@ func loadConfiguration(cfg interface{}) {
 	if err := viper.ReadInConfig(); err != nil {
 		panic(fmt.Errorf("fatal error config file: %s", err))
 	}
+}
 
-	if err := viper.Unmarshal(&cfg); err != nil {
-		panic(fmt.Errorf("fatal error decoding configuration into struct: %v", err))
-	}
+// Get returns a configuration map by key.
+func Get(key string) interface{} {
+	return viper.Get(key)
+}
+
+// GetString returns a string by key.
+func GetString(key string) string {
+	return viper.GetString(key)
 }

@@ -14,8 +14,8 @@ func TestError(t *testing.T) {
 		"fake-ID",
 	)
 
-	if _, ok := err.(ClientError); !ok {
-		t.Error("err is not a ClientError implementation")
+	if _, ok := err.(Error); !ok {
+		t.Error("err is not a Error implementation")
 	}
 
 	httpErr, ok := err.(*HTTPError)
@@ -38,8 +38,8 @@ func TestBadRequest(t *testing.T) {
 		"TestBadRequest",
 		"TestBadRequest-ID",
 	)
-	if _, ok := err.(ClientError); !ok {
-		t.Error("err is not a ClientError implementation")
+	if _, ok := err.(Error); !ok {
+		t.Error("err is not a Error implementation")
 	}
 
 	httpErr, ok := err.(*HTTPError)

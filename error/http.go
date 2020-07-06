@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// HTTPError implements ClientError interface.
+// HTTPError implements Error interface.
 type HTTPError struct {
 	Code      int         `json:"code"`
 	Err       string      `json:"error"`
@@ -51,7 +51,7 @@ func NewHTTPError(err error, status int, detail interface{}, requestID string) e
 
 // RenderError exported to be used in this lib (a.e. in middlewares) returns error to the client.
 func RenderError(w http.ResponseWriter, err error) {
-	clientError, ok := err.(ClientError)
+	clientError, ok := err.(Error)
 	if !ok {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

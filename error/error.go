@@ -1,7 +1,8 @@
 package error
 
-// ClientError is an error whose details to be shared with client.
-type ClientError interface {
+// Error is an error whose details to be shared with client.
+type Error interface {
+	// Error method to make Error implement error interface.
 	Error() string
 	// ResponseBody returns response body.
 	ResponseBody() ([]byte, error)

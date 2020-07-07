@@ -1,26 +1,8 @@
 package http
 
-type Controller string
+import "github.com/gogitsu/core/http/router"
 
-// type (
-// 	// Controller .
-// 	Controller interface {
-// 		Router() Router
-// 		SetRouter(r Router)
-// 	}
-
-// 	// BaseController .
-// 	BaseController struct {
-// 		router Router
-// 	}
-// )
-
-// // Router .
-// func (bc *BaseController) Router() Router {
-// 	return bc.router
-// }
-
-// // SetRouter .
-// func (bc *BaseController) SetRouter(r Router) {
-// 	bc.router = r
-// }
+// Controller define a controller interface.
+type Controller interface {
+	Route(router router.Router)
+}

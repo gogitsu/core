@@ -50,26 +50,26 @@ func (gm *GorillaMuxRouter) Get(path string, handlerFunc http.HandlerFunc) Route
 }
 
 // Post .
-func (gm *GorillaMuxRouter) Post(path string, handler http.Handler) Router {
-	gm.Handle("POST", path, handler)
+func (gm *GorillaMuxRouter) Post(path string, handlerFunc http.HandlerFunc) Router {
+	gm.HandleFunc("POST", path, handlerFunc)
 	return gm
 }
 
 // Put .
-func (gm *GorillaMuxRouter) Put(path string, handler http.Handler) Router {
-	gm.Handle("PUT", path, handler)
+func (gm *GorillaMuxRouter) Put(path string, handlerFunc http.HandlerFunc) Router {
+	gm.HandleFunc("PUT", path, handlerFunc)
 	return gm
 }
 
 // Patch .
-func (gm *GorillaMuxRouter) Patch(path string, handler http.Handler) Router {
-	gm.Handle("PATCH", path, handler)
+func (gm *GorillaMuxRouter) Patch(path string, handlerFunc http.HandlerFunc) Router {
+	gm.HandleFunc("PATCH", path, handlerFunc)
 	return gm
 }
 
 // Delete .
-func (gm *GorillaMuxRouter) Delete(path string, handler http.Handler) Router {
-	gm.Handle("DELETE", path, handler)
+func (gm *GorillaMuxRouter) Delete(path string, handlerFunc http.HandlerFunc) Router {
+	gm.HandleFunc("DELETE", path, handlerFunc)
 	return gm
 }
 

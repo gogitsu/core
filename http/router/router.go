@@ -19,10 +19,10 @@ type (
 		Handle(method string, path string, handler http.Handler) Router
 		HandleFunc(method string, path string, handlerFunc http.HandlerFunc) Router
 		Get(path string, handlerFunc http.HandlerFunc) Router
-		Post(path string, handler http.Handler) Router
-		Put(path string, handler http.Handler) Router
-		Patch(path string, handler http.Handler) Router
-		Delete(path string, handler http.Handler) Router
+		Post(path string, handlerFunc http.HandlerFunc) Router
+		Put(path string, handlerFunc http.HandlerFunc) Router
+		Patch(path string, handlerFunc http.HandlerFunc) Router
+		Delete(path string, handlerFunc http.HandlerFunc) Router
 		ServeHTTP(w http.ResponseWriter, r *http.Request)
 	}
 )

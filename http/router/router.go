@@ -15,14 +15,14 @@ const (
 type (
 	// Router .
 	Router interface {
-		BasePath(bp string) Router
-		Handle(method string, path string, handler http.Handler)
-		HandleFunc(method string, path string, handlerFunc http.HandlerFunc)
-		Get(path string, handler http.Handler)
-		Post(path string, handler http.Handler)
-		Put(path string, handler http.Handler)
-		Patch(path string, handler http.Handler)
-		Delete(path string, handler http.Handler)
+		RootPath(path string) Router
+		Handle(method string, path string, handler http.Handler) Router
+		HandleFunc(method string, path string, handlerFunc http.HandlerFunc) Router
+		Get(path string, handler http.Handler) Router
+		Post(path string, handler http.Handler) Router
+		Put(path string, handler http.Handler) Router
+		Patch(path string, handler http.Handler) Router
+		Delete(path string, handler http.Handler) Router
 		ServeHTTP(w http.ResponseWriter, r *http.Request)
 	}
 )
@@ -33,8 +33,8 @@ type (
 func NewRouter(rt string) Router {
 	switch rt {
 	case Gorilla:
-		return &GorillaMuxRouter{}
+		return NewGorillaMuxRouter()
 	default:
-		return &GorillaMuxRouter{}
+		return NewGorillaMuxRouter()
 	}
 }

@@ -1,24 +1,26 @@
 package http
 
-type (
-	// Controller .
-	Controller interface {
-		Router() Router
-		SetRouter(r Router)
-	}
+type Controller string
 
-	// BaseController .
-	BaseController struct {
-		router Router
-	}
-)
+// type (
+// 	// Controller .
+// 	Controller interface {
+// 		Router() Router
+// 		SetRouter(r Router)
+// 	}
 
-// Router .
-func (bc *BaseController) Router() Router {
-	return bc.router
-}
+// 	// BaseController .
+// 	BaseController struct {
+// 		router Router
+// 	}
+// )
 
-// SetRouter .
-func (bc *BaseController) SetRouter(r Router) {
-	bc.router = r
-}
+// // Router .
+// func (bc *BaseController) Router() Router {
+// 	return bc.router
+// }
+
+// // SetRouter .
+// func (bc *BaseController) SetRouter(r Router) {
+// 	bc.router = r
+// }

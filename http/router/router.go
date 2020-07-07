@@ -18,7 +18,7 @@ type (
 		RootPath(path string) Router
 		Handle(method string, path string, handler http.Handler) Router
 		HandleFunc(method string, path string, handlerFunc http.HandlerFunc) Router
-		Get(path string, handler http.Handler) Router
+		Get(path string, handlerFunc http.HandlerFunc) Router
 		Post(path string, handler http.Handler) Router
 		Put(path string, handler http.Handler) Router
 		Patch(path string, handler http.Handler) Router
@@ -36,5 +36,17 @@ func NewRouter(rt string) Router {
 		return NewGorillaMuxRouter()
 	default:
 		return NewGorillaMuxRouter()
+	}
+}
+
+// NewRouterWithRootPath is the factory function to instantiate a new Router
+// according to the input router type and root path.
+// Default is the Gorilla mux instance.
+func NewRouterWithRootPath(rt string, path string) Router {
+	switch rt {
+	case Gorilla:
+		return NewGorillaMuxRouterWithRootPath(path)
+	default:
+		return NewGorillaMuxRouterWithRootPath(path)
 	}
 }

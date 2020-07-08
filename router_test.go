@@ -11,17 +11,7 @@ func TestRouter(t *testing.T) {
 		w.WriteHeader(http.StatusOK)
 	}).Methods("GET")
 
-	p := r.Mux.PathPrefix("/products").Subrouter()
-
-	p.HandleFunc("", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	}).Methods("GET")
-	p.HandleFunc("/{id}", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	}).Methods("GET")
-	// r.Walk(LogRoute)
-
-	g := r.Group("/accounts")
+	g := r.WithRoot("/accounts")
 	g.Get("", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})

@@ -19,6 +19,20 @@ func (mc *MyController) Route(r *Router) {
 	})
 }
 
+type FooController struct {
+	BaseController
+}
+
+func NewFooController() Controller {
+	return &MyController{BaseController{basePath: "/foo"}}
+}
+
+func (mc *FooController) Route(r *Router) {
+	r.Get("/{id}", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+}
+
 type SimpleController struct {
 	BaseController
 }
@@ -33,20 +47,19 @@ func (sc *SimpleController) Route(r *Router) {
 	})
 }
 func TestController(t *testing.T) {
-	t.Log("\n\n******* TestController ******\n")
 	r := NewRouter().WithRoot("/api/v1")
 	c := NewMyController("/todos")
-	t.Logf("MyController.basePath: %s", c.BasePath())
 
-	// c.Route(r.Group(c.BasePath()))
 	r.WithControllers(c)
 	r.Walk(LogRoute)
 
-	r2 := NewRouter().
-		WithRoot("/api/v2").
+	r2 := NewRouter()
+	r2.WithControllers(NewFooController())
+	r2.WithRoot("/api/v2").
 		WithControllers(
 			NewMyController("/todos"),
 			NewSimpleController("/notes"),
 		)
+	r2.WithRoot("/api/v3").WithControllers(NewFooController())
 	r2.Walk(LogRoute)
 }

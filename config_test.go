@@ -4,16 +4,8 @@ import (
 	"testing"
 )
 
-/*
-
-service:
-  group: test-group
-  name: test-service
-  version: 0.1.0
-
-*/
-
-type Configuration struct {
+// Cfg .
+type Cfg struct {
 	Service struct {
 		Group   string `yaml:"group" env:"GROUP" env-default:"env-group"`
 		Name    string `yaml:"name"`
@@ -23,8 +15,7 @@ type Configuration struct {
 
 func TestReadConfig(t *testing.T) {
 	c := &Configurator{}
-	cfg := Configuration{}
-	// c.AddPath("config")
+	cfg := Cfg{}
 	c.SetFileName("config-test.yml")
 	if err := c.ReadConfig(&cfg); err != nil {
 		t.Error(err.Error())

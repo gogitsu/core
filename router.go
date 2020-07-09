@@ -1,3 +1,11 @@
+// Copyright 2020 Luca Stasio. All rights reserved.
+// Use of this source code is governed by a MIT
+// license that can be found in the LICENSE file.
+
+// Package core implements core components of gogitsu lib.
+//
+// router.go implements Router interface and concrete implementations.
+// Actually only Gorilla based concrete Router is implemented.
 package core
 
 import (

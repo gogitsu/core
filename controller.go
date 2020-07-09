@@ -3,7 +3,7 @@ package core
 // Controller .
 type Controller interface {
 	BasePath() string
-	Route(r *Router)
+	Route(r Router)
 }
 
 // BaseController .
@@ -17,5 +17,5 @@ func (bc BaseController) BasePath() string {
 }
 
 // Route .
-func (bc BaseController) Route(r *Router) {
+func (bc BaseController) Route(r Router) {
 }

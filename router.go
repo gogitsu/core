@@ -8,29 +8,49 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// RouteCallback is a function on *mux.Route.
-type RouteCallback func(*mux.Route)
+const (
+	// Gorilla is the string identifier for Gorilla Mux implemenetation.
+	Gorilla string = "gorilla"
 
-// Router is the main routing structure.
-// It holds a Gorilla mux to be used for routing configuration.
-type Router struct {
-	mux *mux.Router
-}
+	// Chi is the string identifier for Chi mux implementation.
+	// Chi string = "chi"
+)
 
-// NewRouter return a new Router instance.
-func NewRouter() *Router {
-	return &Router{mux.NewRouter()}
+type (
+	// WalkFn is the type for function to be called from the Walk function.
+	WalkFn func(interface{})
+
+	// Router defines interface to work with concrete routers.
+	Router interface {
+		WithRoot(path string) Router
+		WithControllers(ctrls ...Controller) Router
+		Walk(wfn WalkFn)
+		HandleFunc(path string, fn http.HandlerFunc) interface{}
+		Get(path string, fn http.HandlerFunc) Router
+		Post(path string, fn http.HandlerFunc) Router
+	}
+
+	// GorillaRouter is the main routing structure.
+	// It holds a Gorilla mux to be used for routing configuration.
+	GorillaRouter struct {
+		mux *mux.Router
+	}
+)
+
+// NewGorillaRouter return a new Router instance.
+func NewGorillaRouter() *GorillaRouter {
+	return &GorillaRouter{mux.NewRouter()}
 }
 
 // WithRoot .
 // Here the Subrouter is the root for Groups defined by the controller paths.
-func (r *Router) WithRoot(path string) *Router {
-	return &Router{r.mux.PathPrefix(path).Subrouter().StrictSlash(true)}
+func (r *GorillaRouter) WithRoot(path string) Router {
+	return &GorillaRouter{r.mux.PathPrefix(path).Subrouter().StrictSlash(true)}
 }
 
 // WithControllers .
 // Here each controller's base path will define the relative Group into the root path.
-func (r *Router) WithControllers(ctrls ...Controller) *Router {
+func (r *GorillaRouter) WithControllers(ctrls ...Controller) Router {
 	for _, c := range ctrls {
 		c.Route(r.WithRoot(c.BasePath()))
 	}
@@ -38,34 +58,36 @@ func (r *Router) WithControllers(ctrls ...Controller) *Router {
 }
 
 // Walk walks on routes and execute the input callback.
-func (r *Router) Walk(rcb RouteCallback) {
+func (r *GorillaRouter) Walk(wfn WalkFn) {
 	r.mux.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 		if route.GetHandler() != nil {
-			rcb(route)
+			wfn(route)
 		}
 		return nil
 	})
 }
 
 // HandleFunc .
-func (r *Router) HandleFunc(path string, fn http.HandlerFunc) *mux.Route {
+func (r *GorillaRouter) HandleFunc(path string, fn http.HandlerFunc) interface{} {
 	return r.mux.HandleFunc(path, fn)
 }
 
 // Get .
-func (r *Router) Get(path string, fn http.HandlerFunc) *Router {
-	r.HandleFunc(path, fn).Methods("GET")
+func (r *GorillaRouter) Get(path string, fn http.HandlerFunc) Router {
+	r.HandleFunc(path, fn).(*mux.Route).Methods("GET")
 	return r
 }
 
 // Post .
-func (r *Router) Post(path string, fn http.HandlerFunc) *Router {
-	r.HandleFunc(path, fn).Methods("POST")
+func (r *GorillaRouter) Post(path string, fn http.HandlerFunc) Router {
+	r.HandleFunc(path, fn).(*mux.Route).Methods("POST")
 	return r
 }
 
 // PrintRoute .
-func PrintRoute(route *mux.Route) {
+// func PrintRoute(route *mux.Route) {
+func PrintRoute(i interface{}) {
+	route := i.(*mux.Route)
 	tmpl, _ := route.GetPathTemplate()
 	methods, _ := route.GetMethods()
 	for _, v := range methods {
@@ -75,7 +97,9 @@ func PrintRoute(route *mux.Route) {
 }
 
 // LogRoute .
-func LogRoute(route *mux.Route) {
+// func LogRoute(route *mux.Route) {
+func LogRoute(i interface{}) {
+	route := i.(*mux.Route)
 	tmpl, _ := route.GetPathTemplate()
 	methods, _ := route.GetMethods()
 	for _, v := range methods {

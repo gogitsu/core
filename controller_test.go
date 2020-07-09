@@ -13,7 +13,7 @@ func NewMyController(path string) Controller {
 	return &MyController{BaseController{basePath: path}}
 }
 
-func (mc *MyController) Route(r *Router) {
+func (mc *MyController) Route(r Router) {
 	r.Get("/{id}", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
@@ -27,7 +27,7 @@ func NewFooController() Controller {
 	return &MyController{BaseController{basePath: "/foo"}}
 }
 
-func (mc *FooController) Route(r *Router) {
+func (mc *FooController) Route(r Router) {
 	r.Get("/{id}", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
@@ -41,19 +41,19 @@ func NewSimpleController(path string) Controller {
 	return &SimpleController{BaseController{basePath: path}}
 }
 
-func (sc *SimpleController) Route(r *Router) {
+func (sc *SimpleController) Route(r Router) {
 	r.Get("/{id}", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
 }
 func TestController(t *testing.T) {
-	r := NewRouter().WithRoot("/api/v1")
+	r := NewGorillaRouter().WithRoot("/api/v1")
 	c := NewMyController("/todos")
 
 	r.WithControllers(c)
 	r.Walk(LogRoute)
 
-	r2 := NewRouter()
+	r2 := NewGorillaRouter()
 	r2.WithControllers(NewFooController())
 	r2.WithRoot("/api/v2").
 		WithControllers(

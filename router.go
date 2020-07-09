@@ -28,6 +28,11 @@ type (
 		HandleFunc(path string, fn http.HandlerFunc) interface{}
 		Get(path string, fn http.HandlerFunc) Router
 		Post(path string, fn http.HandlerFunc) Router
+		Put(path string, fn http.HandlerFunc) Router
+		Patch(path string, fn http.HandlerFunc) Router
+		Delete(path string, fn http.HandlerFunc) Router
+		PrintRoute(interface{})
+		LogRoute(interface{})
 	}
 
 	// GorillaRouter is the main routing structure.
@@ -37,9 +42,38 @@ type (
 	}
 )
 
-// NewGorillaRouter return a new Router instance.
+// NewRouter is the factory function to instantiate a new Router
+// according to the input router type.
+// Default is the Gorilla mux instance.
+func NewRouter(rt string) Router {
+	switch rt {
+	case Gorilla:
+		return NewGorillaRouter()
+	default:
+		return NewGorillaRouter()
+	}
+}
+
+// NewRouterWithRootPath is the factory function to instantiate a new Router
+// according to the input router type and root path.
+// Default is the Gorilla mux instance.
+func NewRouterWithRootPath(rt string, path string) Router {
+	switch rt {
+	case Gorilla:
+		return NewGorillaRouterWithRoot(path)
+	default:
+		return NewGorillaRouterWithRoot(path)
+	}
+}
+
+// NewGorillaRouter return a new GorillaRouter instance.
 func NewGorillaRouter() *GorillaRouter {
 	return &GorillaRouter{mux.NewRouter()}
+}
+
+// NewGorillaRouterWithRoot return a new GorillaRouter with root path instance.
+func NewGorillaRouterWithRoot(path string) *GorillaRouter {
+	return NewGorillaRouter().WithRoot(path).(*GorillaRouter)
 }
 
 // WithRoot .
@@ -84,9 +118,27 @@ func (r *GorillaRouter) Post(path string, fn http.HandlerFunc) Router {
 	return r
 }
 
+// Put .
+func (r *GorillaRouter) Put(path string, fn http.HandlerFunc) Router {
+	r.HandleFunc(path, fn).(*mux.Route).Methods("PUT")
+	return r
+}
+
+// Patch .
+func (r *GorillaRouter) Patch(path string, fn http.HandlerFunc) Router {
+	r.HandleFunc(path, fn).(*mux.Route).Methods("PATCH")
+	return r
+}
+
+// Delete .
+func (r *GorillaRouter) Delete(path string, fn http.HandlerFunc) Router {
+	r.HandleFunc(path, fn).(*mux.Route).Methods("DELETE")
+	return r
+}
+
 // PrintRoute .
 // func PrintRoute(route *mux.Route) {
-func PrintRoute(i interface{}) {
+func (r *GorillaRouter) PrintRoute(i interface{}) {
 	route := i.(*mux.Route)
 	tmpl, _ := route.GetPathTemplate()
 	methods, _ := route.GetMethods()
@@ -98,7 +150,7 @@ func PrintRoute(i interface{}) {
 
 // LogRoute .
 // func LogRoute(route *mux.Route) {
-func LogRoute(i interface{}) {
+func (r *GorillaRouter) LogRoute(i interface{}) {
 	route := i.(*mux.Route)
 	tmpl, _ := route.GetPathTemplate()
 	methods, _ := route.GetMethods()

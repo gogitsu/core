@@ -1,4 +1,4 @@
-package error
+package core
 
 import (
 	"encoding/json"
@@ -6,6 +6,17 @@ import (
 	"net/http"
 	"time"
 )
+
+// Error is an error whose details to be shared with client.
+// Check also this https://github.com/google/jsonapi/blob/master/errors.go
+type Error interface {
+	// Error method to make Error implement error interface.
+	Error() string
+	// ResponseBody returns response body.
+	ResponseBody() ([]byte, error)
+	// ResponseHeaders returns http status code and headers.
+	ResponseHeaders() (int, map[string]string)
+}
 
 // HTTPError implements Error interface.
 type HTTPError struct {

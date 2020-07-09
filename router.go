@@ -45,6 +45,8 @@ type (
 // NewRouter is the factory function to instantiate a new Router
 // according to the input router type.
 // Default is the Gorilla mux instance.
+//
+// Actually only Gorilla based concrete Router.
 func NewRouter(rt string) Router {
 	switch rt {
 	case Gorilla:

@@ -2,7 +2,6 @@ package core
 
 import (
 	"errors"
-	"log"
 	"sync"
 
 	"github.com/ilyakaznacheev/cleanenv"
@@ -41,10 +40,7 @@ func GetConfigurator() *Configurator {
 
 // AddPath adds a path to the configuration paths array.
 func (c *Configurator) AddPath(path string) {
-	log.Printf("AddConfigPath %s", path)
-
 	c.paths = append(c.paths, path)
-	log.Println("Config Path added")
 }
 
 // SetFileName sets the name for the configuration file.

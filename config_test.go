@@ -5,12 +5,20 @@ import (
 )
 
 // Cfg .
+// type Cfg struct {
+// 	Service struct {
+// 		Group   string `yaml:"group" env:"GROUP" env-default:"env-group"`
+// 		Name    string `yaml:"name"`
+// 		Version string `yaml:"version"`
+// 	} `yaml:"service"`
+// }
+
 type Cfg struct {
 	Service struct {
-		Group   string `yaml:"group" env:"GROUP" env-default:"env-group"`
-		Name    string `yaml:"name"`
-		Version string `yaml:"version"`
-	} `yaml:"service"`
+		Group   string
+		Name    string
+		Version string
+	}
 }
 
 func TestReadConfig(t *testing.T) {

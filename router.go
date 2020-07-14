@@ -26,6 +26,8 @@ const (
 
 type (
 	// WalkFn is the type for function to be called from the Walk function.
+	// Heach concrete router implementation will cast the input interfcae{}
+	// to thw right input param type (a.e. for Gorilla mux will be a Route).
 	WalkFn func(interface{})
 
 	// Router defines interface to work with concrete routers.

@@ -6,7 +6,7 @@ import (
 )
 
 func TestRouter(t *testing.T) {
-	r := NewGorillaRouter()
+	r := NewRouter(Gorilla)
 	g := r.WithRoot("/accounts")
 	g.Get("", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)

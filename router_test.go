@@ -1,39 +1,33 @@
 package core
 
 import (
-	"net/http"
-	"testing"
-)
-
-func TestRouter(t *testing.T) {
-	r := NewRouter(Gorilla)
-	g := r.WithRoot("/accounts")
-	g.Get("", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	})
-	r.Walk(r.LogRoute)
-}
-
-/*
-
-package router
-
-import (
 	"io/ioutil"
 	"net/http"
 	"testing"
 	"time"
 )
 
+const (
+	expectedHTTPStatus = http.StatusOK
+	expectedHTTPBody   = "OK"
+)
+
 func TestRouter(t *testing.T) {
-	mux := NewRouter(Gorilla)
-	mux.Get("/test", func(w http.ResponseWriter, r *http.Request) {
+	r := NewRouter(Gorilla).WithRoot("/api/v1")
+	g := r.WithRoot("/accounts")
+	g.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("TEST-RESPONSE"))
+		w.Write([]byte("OK"))
 	})
+	g2 := r.WithRoot("/posts")
+	g2.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
+	r.Walk(r.LogRoute)
 
 	srv := &http.Server{
-		Handler:      mux,
+		Handler:      r.Mux(),
 		Addr:         "127.0.0.1:8000",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
@@ -43,14 +37,14 @@ func TestRouter(t *testing.T) {
 		t.Fatal(srv.ListenAndServe())
 	}()
 
-	response, err := http.Get("http://127.0.0.1:8000/test")
+	response, err := http.Get("http://127.0.0.1:8000/api/v1/accounts")
 	if err != nil {
 		t.Error(err)
 		return
 	}
 	defer response.Body.Close()
-	if response.StatusCode != http.StatusOK {
-		t.Errorf("expected 200 response code, got %d", response.StatusCode)
+	if response.StatusCode != expectedHTTPStatus {
+		t.Errorf("expected '%d' response code, got %d", expectedHTTPStatus, response.StatusCode)
 		return
 	}
 
@@ -61,54 +55,8 @@ func TestRouter(t *testing.T) {
 	}
 
 	bodyString := string(body)
-	if bodyString != "TEST-RESPONSE" {
-		t.Errorf("expected 'TEST-RESPONSE' response body, got %s", bodyString)
+	if bodyString != expectedHTTPBody {
+		t.Errorf("expected '%s' response body, got %s", expectedHTTPBody, bodyString)
 		return
 	}
 }
-
-func TestRouterWithRootPath(t *testing.T) {
-	mux := NewRouterWithRootPath(Gorilla, "/api")
-	mux.Get("/test", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("TEST-RESPONSE from /api"))
-	})
-
-	srv := &http.Server{
-		Handler:      mux,
-		Addr:         "127.0.0.1:8001",
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
-	}
-
-	go func() {
-		defer srv.Close()
-		t.Fatal(srv.ListenAndServe())
-	}()
-
-	response, err := http.Get("http://127.0.0.1:8001/api/test")
-	if err != nil {
-		t.Error(err)
-		return
-	}
-	defer response.Body.Close()
-	if response.StatusCode != http.StatusOK {
-		t.Errorf("expected 200 response code, got %d", response.StatusCode)
-		return
-	}
-
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		t.Error(err)
-		return
-	}
-
-	bodyString := string(body)
-	if bodyString != "TEST-RESPONSE from /api" {
-		t.Errorf("expected 'TEST-RESPONSE from /api' response body, got %s", bodyString)
-		return
-	}
-}
-
-
-*/

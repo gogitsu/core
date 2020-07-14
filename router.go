@@ -32,6 +32,7 @@ type (
 
 	// Router defines interface to work with concrete routers.
 	Router interface {
+		Mux() http.Handler
 		WithRoot(path string) Router
 		WithControllers(ctrls ...Controller) Router
 		Walk(wfn WalkFn)
@@ -86,6 +87,11 @@ func NewGorillaRouter() *GorillaRouter {
 // NewGorillaRouterWithRoot return a new GorillaRouter with root path instance.
 func NewGorillaRouterWithRoot(path string) *GorillaRouter {
 	return NewGorillaRouter().WithRoot(path).(*GorillaRouter)
+}
+
+// Mux return the http.Handler implementation.
+func (r *GorillaRouter) Mux() http.Handler {
+	return r.mux
 }
 
 // WithRoot .

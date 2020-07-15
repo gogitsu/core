@@ -21,10 +21,10 @@ type BaseController struct {
 }
 
 // BasePath .
-func (bc BaseController) BasePath() string {
+func (bc *BaseController) BasePath() string {
 	return bc.basePath
 }
 
 // Route .
-func (bc BaseController) Route(r Router) {
+func (bc *BaseController) Route(r Router) {
 }

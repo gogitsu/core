@@ -20,9 +20,22 @@ const (
 
 	// MySQLType to create a connection.
 	MySQLType = "mysql"
+	// PostgresType to create a connection.
+	PostgresType = "postgres"
+	// Sqlite3Type to create a connection.
+	Sqlite3Type = "sqlite3"
+	// MSsqlType to create a connection.
+	MSsqlType = "mssql"
 
-	// MySQLConnectionStringFormat to create a connection string for MySQL
+	// MySQLConnectionStringFormat to create a connection string for MySQL.
 	MySQLConnectionStringFormat = "%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local"
+
+	// PostresConnectionStringFormat to create a connection string for Postgres.
+	// "host=myhost port=myport user=gorm dbname=gorm password=mypassword"
+	PostresConnectionStringFormat = "host=%s port=%d user=%s dbname=%s password=%s"
+
+	// MSsqlConnectionStringFormat to create a connection string for Microsoft SQL Server.
+	MSsqlConnectionStringFormat = "sqlserver://%s:%s@%s:%d?database=%s"
 )
 
 // DBConfig is the configuration struct to set database info
@@ -72,6 +85,24 @@ func (dbc DBConfigurator) connectionString() string {
 	case MySQLType:
 		return fmt.Sprintf(
 			MySQLConnectionStringFormat,
+			dbc.config.User,
+			dbc.config.Password,
+			dbc.config.Host,
+			dbc.config.Port,
+			dbc.config.Database)
+	case PostgresType:
+		return fmt.Sprintf(
+			PostresConnectionStringFormat,
+			dbc.config.Host,
+			dbc.config.Port,
+			dbc.config.User,
+			dbc.config.Database,
+			dbc.config.Password)
+	case Sqlite3Type:
+		return dbc.config.Database
+	case MSsqlType:
+		return fmt.Sprintf(
+			MSsqlConnectionStringFormat,
 			dbc.config.User,
 			dbc.config.Password,
 			dbc.config.Host,

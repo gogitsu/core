@@ -16,7 +16,7 @@ import "github.com/jinzhu/gorm"
 // According to the specific db library, the DB type will be
 // the library db type.
 // A.e. for a gorm implementation it will be a *gorm.DB, or
-// for a database/sql implementation it will be a *sql.DB.
+// for a database/sql implementation it will be a *sql.DB.ù
 type Repository interface {
 	DB() interface{}
 	SetDB(db interface{})

@@ -17,12 +17,12 @@ type Controller interface {
 
 // BaseController .
 type BaseController struct {
-	basePath string
+	Path string
 }
 
 // BasePath .
 func (bc *BaseController) BasePath() string {
-	return bc.basePath
+	return bc.Path
 }
 
 // Route .

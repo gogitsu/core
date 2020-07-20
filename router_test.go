@@ -28,7 +28,7 @@ func TestRouter(t *testing.T) {
 
 	srv := &http.Server{
 		Handler:      r.Mux(),
-		Addr:         "127.0.0.1:8000",
+		Addr:         "localhost:8000",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
@@ -37,7 +37,7 @@ func TestRouter(t *testing.T) {
 		t.Fatal(srv.ListenAndServe())
 	}()
 
-	response, err := http.Get("http://127.0.0.1:8000/api/v1/accounts")
+	response, err := http.Get("http://localhost:8000/api/v1/accounts")
 	if err != nil {
 		t.Error(err)
 		return

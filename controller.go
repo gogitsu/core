@@ -20,11 +20,17 @@ type BaseController struct {
 	Path string
 }
 
+// NewBaseController returns a new BaseController instance
+// useful in composition.
+func NewBaseController(path string) BaseController {
+	return BaseController{Path: path}
+}
+
 // BasePath .
-func (bc *BaseController) BasePath() string {
+func (bc BaseController) BasePath() string {
 	return bc.Path
 }
 
 // Route .
-func (bc *BaseController) Route(r Router) {
+func (bc BaseController) Route(r Router) {
 }

@@ -10,7 +10,7 @@ type MyController struct {
 }
 
 func NewMyController(path string) Controller {
-	return &MyController{BaseController{basePath: path}}
+	return &MyController{NewBaseController(path)}
 }
 
 func (mc *MyController) Route(r Router) {
@@ -24,7 +24,7 @@ type FooController struct {
 }
 
 func NewFooController() Controller {
-	return &MyController{BaseController{basePath: "/foo"}}
+	return &MyController{NewBaseController("/foo")}
 }
 
 func (mc *FooController) Route(r Router) {
@@ -38,7 +38,7 @@ type SimpleController struct {
 }
 
 func NewSimpleController(path string) Controller {
-	return &SimpleController{BaseController{basePath: path}}
+	return &SimpleController{NewBaseController(path)}
 }
 
 func (sc *SimpleController) Route(r Router) {
